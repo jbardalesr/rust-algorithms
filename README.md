@@ -1,4 +1,1 @@
 # algorithms
-<code>
-  asdsad
-</code>
