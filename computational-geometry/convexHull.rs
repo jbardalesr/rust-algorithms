@@ -22,13 +22,13 @@ impl PartialEq for Point {
 
 impl Sub for Point {
     type Output = Point;
-    
-    fn sub(self, other:Point) -> Point{
+
+    fn sub(self, other: Point) -> Point {
         Point {
             x: self.x - other.x,
             y: self.y - other.y,
         }
-    }  
+    }
 }
 
 fn min_x(s: &[Point]) -> Point {
@@ -41,8 +41,32 @@ fn min_x(s: &[Point]) -> Point {
     return *min;
 }
 
-fn cross (u:Point, v:Point) -> i32{
-    return u.x*v.y - u.x*v.y;
+fn cross(u: Point, v: Point) -> i32 {
+    return u.x * v.y - u.y * v.x;
+}
+
+fn jarvis_march(s: [Point; N]) -> Vec<Point> {
+    //min value is copied to point_on_hull
+    let mut point_on_hull = min_x(&s);
+    let mut h: Vec<Point> = Vec::new();
+    let mut i = 0;
+
+    loop {
+        h.push(point_on_hull);
+        let mut endpoint = s[0];
+        for j in 0..N {
+            if endpoint == point_on_hull || cross(endpoint - h[i], s[j] - h[i]) > 0 {
+                endpoint = s[j];
+            }
+        }
+        i += 1;
+        point_on_hull = endpoint;
+
+        if endpoint == h[0] {
+            break;
+        }
+    }
+    return h;
 }
 
 fn main() {
@@ -57,29 +81,6 @@ fn main() {
         Point::new(40, 6),
         Point::new(34, 20),
         Point::new(8, 13),
-    ]; 
-    jarvis(s);
-} 
-
-fn jarvis(s: [Point;N]) {
-    //min value is copied to point_on_hull
-    let mut point_on_hull = min_x(&s);
-    let mut p: Vec<Point> = Vec::new();
-    let mut i = 0;
-    loop {
-        p.push(point_on_hull);
-        let mut endpoint = s[0];
-        for j in 0..N {
-            if endpoint == point_on_hull || cross(endpoint - p[i], s[j] - p[i]) > 0 {
-                endpoint = s[j];
-            }
-        }
-        i += 1;
-        point_on_hull = endpoint;
-        if endpoint == p[0] {
-            break;
-        }
-    }
-    
-    println!("{:?}",  p);
+    ];
+    println!("Convex Hull\n{:?}", jarvis_march(s));
 }
