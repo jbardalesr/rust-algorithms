@@ -1,3 +1,4 @@
+#[derive(Debug)]
 const LENGTH:usize = 17;
 struct Array {
     list:[i32; LENGTH],
@@ -9,13 +10,13 @@ fn max_heapify(array:&mut Array, i:usize){
     let r = 2*i + 1;
     let mut largest;
 
-    if l<=array.heap_size && array.list[l]>array.list[i] {
+    if l <= array.heap_size && array.list[l] > array.list[i] {
         largest = l;
     } else {
         largest = i;
     }
 
-    if r<=array.heap_size && array.list[r]>array.list[largest] {
+    if r <= array.heap_size && array.list[r] > array.list[largest] {
         largest = r;
     }
 
@@ -39,4 +40,14 @@ fn heapsort(array: &mut Array) {
         array.heap_size -= 1;
         max_heapify(array, 0);
     }
+}
+
+fn main() {
+    let mut array = Array {
+        list:[9, 15, -4, 0, 6, 3, 2, -1, 10, 98, 1, -10, 15, 90, 68, 14, 20],
+        heap_size: 0
+    };
+
+    //heapsort(&mut array);
+    println!("{:?}", array.list);
 }
